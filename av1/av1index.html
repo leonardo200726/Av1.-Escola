@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escola Escudo - Sistema de Gestão Escolar</title>
+    <link rel="stylesheet" href="av1.styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <div class="logo">🛡️ Escola Escudo</div>
+            <div class="user-info">
+                Sistema de Gestão Escolar | <span id="current-date"></span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <div class="nav-tabs">
+        <div class="nav-tabs-content">
+            <button class="tab-button active" onclick="switchTab('dashboard', this)">📊 Dashboard</button>
+            <button class="tab-button" onclick="switchTab('students', this)">👥 Alunos</button>
+            <button class="tab-button" onclick="switchTab('subjects', this)">📚 Matérias</button>
+            <button class="tab-button" onclick="switchTab('grades', this)">📝 Notas</button>
+            <button class="tab-button" onclick="switchTab('reports', this)">📈 Relatórios</button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Dashboard Tab -->
+        <div id="dashboard" class="tab-content active">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number" id="total-students">0</div>
+                    <div class="stat-label">Total de Alunos</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="total-subjects">6</div>
+                    <div class="stat-label">Matérias</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="passed-students">0</div>
+                    <div class="stat-label">Alunos Aprovados</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="average-grade">0.0</div>
+                    <div class="stat-label">Média Geral</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Bem-vindo ao Sistema da Escola Escudo</h2>
+                <div class="welcome-content">
+                    <p>Gerencie alunos, matérias e notas de forma eficiente com nossa plataforma integrada.</p>
+                    <p><strong>Funcionalidades disponíveis:</strong></p>
+                    <ul>
+                        <li>Cadastro e gerenciamento de alunos</li>
+                        <li>Controle de notas por matéria e bimestre</li>
+                        <li>Cálculo automático de médias (nota mínima: 6.0)</li>
+                        <li>Relatórios de aprovação/reprovação detalhados</li>
+                        <li>Dashboard com estatísticas em tempo real</li>
+                        <li>Sistema de filtros e busca avançada</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Students Tab -->
+        <div id="students" class="tab-content">
+            <div class="card">
+                <h2>Cadastrar Novo Aluno</h2>
+                <form id="student-form">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="student-name">Nome Completo *</label>
+                            <input type="text" id="student-name" placeholder="Digite o nome completo" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="student-email">Email *</label>
+                            <input type="email" id="student-email" placeholder="exemplo@email.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="student-age">Idade *</label>
+                            <input type="number" id="student-age" min="6" max="18" placeholder="Idade do aluno" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="student-class">Turma *</label>
+                            <select id="student-class" required>
+                                <option value="">Selecione uma turma</option>
+                                <option value="6º Ano A">6º Ano A</option>
+                                <option value="6º Ano B">6º Ano B</option>
+                                <option value="7º Ano A">7º Ano A</option>
+                                <option value="7º Ano B">7º Ano B</option>
+                                <option value="8º Ano A">8º Ano A</option>
+                                <option value="8º Ano B">8º Ano B</option>
+                                <option value="9º Ano A">9º Ano A</option>
+                                <option value="9º Ano B">9º Ano B</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn">Cadastrar Aluno</button>
+                </form>
+            </div>
+
+            <div class="card">
+                <h2>Lista de Alunos</h2>
+                <div class="table-container">
+                    <table id="students-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nome</th>
+                                <th>Email</th>
+                                <th>Idade</th>
+                                <th>Turma</th>
+                                <th>Média</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="students-tbody">
+                            <tr>
+                                <td colspan="8" class="empty-state">
+                                    <div class="loading">
+                                        <div class="loading-spinner"></div>
+                                        <p>Carregando alunos...</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Subjects Tab -->
+        <div id="subjects" class="tab-content">
+            <div class="card">
+                <h2>Matérias do Currículo</h2>
+                <p style="color: #8b949e; margin-bottom: 1.5rem;">
+                    As seguintes matérias fazem parte do currículo da Escola Escudo:
+                </p>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Código</th>
+                                <th>Matéria</th>
+                                <th>Carga Horária</th>
+                                <th>Nota Mínima</th>
+                                <th>Professor</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>MAT</strong></td>
+                                <td>Matemática</td>
+                                <td>5h/semana</td>
+                                <td class="grade-average">6.0</td>
+                                <td>Prof. Ana Silva</td>
+                            </tr>
+                            <tr>
+                                <td><strong>POR</strong></td>
+                                <td>Português</td>
+                                <td>5h/semana</td>
+                                <td class="grade-average">6.0</td>
+                                <td>Prof. Carlos Santos</td>
+                            </tr>
+                            <tr>
+                                <td><strong>HIS</strong></td>
+                                <td>História</td>
+                                <td>3h/semana</td>
+                                <td class="grade-average">6.0</td>
+                                <td>Prof. Maria Oliveira</td>
+                            </tr>
+                            <tr>
+                                <td><strong>GEO</strong></td>
+                                <td>Geografia</td>
+                                <td>3h/semana</td>
+                                <td class="grade-average">6.0</td>
+                                <td>Prof. João Costa</td>
+                            </tr>
+                            <tr>
+                                <td><strong>CIE</strong></td>
+                                <td>Ciências</td>
+                                <td>4h/semana</td>
+                                <td class="grade-average">6.0</td>
+                                <td>Prof. Rosa Lima</td>
+                            </tr>
+                            <tr>
+                                <td><strong>ING</strong></td>
+                                <td>Inglês</td>
+                                <td>2h/semana</td>
+                                <td class="grade-average">6.0</td>
+                                <td>Prof. Peter Johnson</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Grades Tab -->
+        <div id="grades" class="tab-content">
+            <div class="card">
+                <h2>Lançar Notas</h2>
+                <form id="grades-form">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="grade-student">Aluno *</label>
+                            <select id="grade-student" required>
+                                <option value="">Selecione um aluno</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="grade-subject">Matéria *</label>
+                            <select id="grade-subject" required>
+                                <option value="">Selecione uma matéria</option>
+                                <option value="MAT">Matemática</option>
+                                <option value="POR">Português</option>
+                                <option value="HIS">História</option>
+                                <option value="GEO">Geografia</option>
+                                <option value="CIE">Ciências</option>
+                                <option value="ING">Inglês</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="grade-period">Bimestre *</label>
+                            <select id="grade-period" required>
+                                <option value="">Selecione o bimestre</option>
+                                <option value="1">1º Bimestre</option>
+                                <option value="2">2º Bimestre</option>
+                                <option value="3">3º Bimestre</option>
+                                <option value="4">4º Bimestre</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="grade-value">Nota (0-10) *</label>
+                            <input type="number" id="grade-value" min="0" max="10" step="0.1" 
+                                   placeholder="Digite a nota" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn">Lançar Nota</button>
+                </form>
+            </div>
+
+            <div class="card">
+                <h2>Consultar Notas</h2>
+                <div class="filter-section">
+                    <div class="form-group">
+                        <label for="search-student">Filtrar por Aluno</label>
+                        <select id="search-student">
+                            <option value="">Todos os alunos</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="search-subject">Filtrar por Matéria</label>
+                        <select id="search-subject">
+                            <option value="">Todas as matérias</option>
+                            <option value="MAT">Matemática</option>
+                            <option value="POR">Português</option>
+                            <option value="HIS">História</option>
+                            <option value="GEO">Geografia</option>
+                            <option value="CIE">Ciências</option>
+                            <option value="ING">Inglês</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>&nbsp;</label>
+                        <div>
+                            <button id="filter-btn" class="btn btn-secondary">Filtrar</button>
+                            <button id="clear-filters-btn" class="btn btn-secondary">Limpar</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <table id="grades-table">
+                        <thead>
+                            <tr>
+                                <th>Aluno</th>
+                                <th>Matéria</th>
+                                <th>1º Bim</th>
+                                <th>2º Bim</th>
+                                <th>3º Bim</th>
+                                <th>4º Bim</th>
+                                <th>Média</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="grades-tbody">
+                            <tr>
+                                <td colspan="8" class="empty-state">
+                                    <div class="loading">
+                                        <div class="loading-spinner"></div>
+                                        <p>Carregando notas...</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reports Tab -->
+        <div id="reports" class="tab-content">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number status-approved" id="report-approved">0</div>
+                    <div class="stat-label">Aprovados</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number status-failed" id="report-failed">0</div>
+                    <div class="stat-label">Reprovados</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number status-recovery" id="report-recovery">0</div>
+                    <div class="stat-label">Em Recuperação</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="report-percentage">0%</div>
+                    <div class="stat-label">Taxa de Aprovação</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Relatório de Desempenho por Aluno</h2>
+                <div class="table-container">
+                    <table id="student-report-table">
+                        <thead>
+                            <tr>
+                                <th>Aluno</th>
+                                <th>Turma</th>
+                                <th>Matemática</th>
+                                <th>Português</th>
+                                <th>História</th>
+                                <th>Geografia</th>
+                                <th>Ciências</th>
+                                <th>Inglês</th>
+                                <th>Média Geral</th>
+                                <th>Status Final</th>
+                            </tr>
+                        </thead>
+                        <tbody id="student-report-tbody">
+                            <tr>
+                                <td colspan="10" class="empty-state">
+                                    <div class="loading">
+                                        <div class="loading-spinner"></div>
+                                        <p>Carregando relatório...</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Relatório por Matéria</h2>
+                <div class="table-container">
+                    <table id="subject-report-table">
+                        <thead>
+                            <tr>
+                                <th>Matéria</th>
+                                <th>Total Alunos</th>
+                                <th>Aprovados</th>
+                                <th>Reprovados</th>
+                                <th>Média da Turma</th>
+                                <th>Taxa de Aprovação</th>
+                            </tr>
+                        </thead>
+                        <tbody id="subject-report-tbody">
+                            <tr>
+                                <td colspan="6" class="empty-state">
+                                    <div class="loading">
+                                        <div class="loading-spinner"></div>
+                                        <p>Carregando relatório...</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="av1.scripts.js"></script>
+
+    <!-- Footer (opcional) -->
+    <footer style="text-align: center; padding: 2rem; color: #6b7280; border-top: 1px solid rgba(255,255,255,0.1); margin-top: 3rem;">
+        <p>&copy; 2024 Escola Escudo - Sistema de Gestão Escolar</p>
+        <p style="font-size: 0.8rem; margin-top: 0.5rem;">Desenvolvido com Python Flask + MySQL</p>
+    </footer>
+</body>
+</html>
