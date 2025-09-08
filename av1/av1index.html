@@ -4,224 +4,685 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Escola Escudo - Sistema de Gestão Escolar</title>
-    <link rel="stylesheet" href="av1.styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #ffffff;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Login Styles */
+        .login-screen {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .login-box {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .login-box h2 {
+            margin-bottom: 1.5rem;
+            color: #ffffff;
+            font-size: 2rem;
+            font-weight: 600;
+        }
+
+        .login-box input {
+            width: 100%;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .login-box input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .login-box input:focus {
+            outline: none;
+            border-color: rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .login-box button {
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(45deg, #4f46e5, #7c3aed);
+            color: #ffffff;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .login-box button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .login-error {
+            color: #ff6b6b;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+
+        /* Main System Styles */
+        .main-system {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            min-height: 100vh;
+        }
+
+        header {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #60a5fa;
+        }
+
+        .user-info {
+            color: #cbd5e1;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logout-btn {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid #ef4444;
+            color: #ef4444;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: #ef4444;
+            color: white;
+        }
+
+        .nav-tabs {
+            background: rgba(0, 0, 0, 0.2);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-tabs-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            padding: 0 2rem;
+        }
+
+        .tab-button {
+            background: transparent;
+            border: none;
+            padding: 1rem 1.5rem;
+            color: #94a3b8;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .tab-button:hover {
+            color: #e2e8f0;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .tab-button.active {
+            color: #60a5fa;
+            border-bottom-color: #60a5fa;
+        }
+
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 1.5rem;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #60a5fa;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: #cbd5e1;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .card h2 {
+            color: #e2e8f0;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-group label {
+            color: #cbd5e1;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .form-group input,
+        .form-group select {
+            padding: 0.75rem;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #60a5fa;
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #4f46e5, #7c3aed);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-right: 0.5rem;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(107, 114, 128, 0.5);
+        }
+
+        .table-container {
+            overflow-x: auto;
+            border-radius: 12px;
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table th,
+        table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        table th {
+            background: rgba(0, 0, 0, 0.3);
+            color: #cbd5e1;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        table td {
+            color: #e2e8f0;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #94a3b8;
+        }
+
+        .loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .loading-spinner {
+            width: 32px;
+            height: 32px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top: 3px solid #60a5fa;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .status-approved { color: #10b981; }
+        .status-failed { color: #ef4444; }
+        .status-recovery { color: #f59e0b; }
+        .grade-average { color: #60a5fa; font-weight: 600; }
+
+        .welcome-content p {
+            margin-bottom: 1rem;
+            color: #cbd5e1;
+            line-height: 1.6;
+        }
+
+        .welcome-content ul {
+            color: #e2e8f0;
+            padding-left: 1.5rem;
+        }
+
+        .welcome-content li {
+            margin-bottom: 0.5rem;
+            line-height: 1.6;
+        }
+
+        .filter-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr auto;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            align-items: end;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: #6b7280;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 3rem;
+            background: rgba(0, 0, 0, 0.2);
+        }
+    </style>
 </head>
 <body>
-    <!-- Header -->
-    <header>
-        <div class="header-content">
-            <div class="logo">🛡️ Escola Escudo</div>
-            <div class="user-info">
-                Sistema de Gestão Escolar | <span id="current-date"></span>
+    <!-- Área de Login -->  
+    <div id="login-screen" class="login-screen">
+        <form id="login-form" class="login-box">
+            <div style="font-size: 3rem; margin-bottom: 1rem;">🛡️</div>
+            <h2>Escola Escudo</h2>
+            <p style="margin-bottom: 2rem; color: rgba(255, 255, 255, 0.8);">Sistema de Gestão Escolar</p>
+            <input type="text" id="login-username" placeholder="Usuário" required>
+            <input type="password" id="login-password" placeholder="Senha" required>
+            <button type="submit">Entrar</button>
+            <p id="login-error" class="login-error"></p>
+            <div style="margin-top: 1.5rem; font-size: 0.8rem; color: rgba(255, 255, 255, 0.6);">
+                <p><strong>👨‍💼 ADMINISTRADORES:</strong></p>
+                <p>admin / 1234 | diretor / dir123</p>
+                <br>
+                <p><strong>👨‍🏫 PROFESSORES:</strong></p>
+                <p>prof.ana / ana123 (Mat) | prof.carlos / carlos123 (Port)</p>
+                <p>prof.maria / maria123 (Hist) | prof.joao / joao123 (Geo)</p>
+                <p>prof.rosa / rosa123 (Ciên) | prof.peter / peter123 (Ing)</p>
+                <br>
+                <p><strong>👥 OUTROS:</strong></p>
+                <p>coord.pedagogico / coord123 | secretaria / sec123</p>
             </div>
-        </div>
-    </header>
-
-    <!-- Navigation Tabs -->
-    <div class="nav-tabs">
-        <div class="nav-tabs-content">
-            <button class="tab-button active" onclick="switchTab('dashboard', this)">📊 Dashboard</button>
-            <button class="tab-button" onclick="switchTab('students', this)">👥 Alunos</button>
-            <button class="tab-button" onclick="switchTab('subjects', this)">📚 Matérias</button>
-            <button class="tab-button" onclick="switchTab('grades', this)">📝 Notas</button>
-            <button class="tab-button" onclick="switchTab('reports', this)">📈 Relatórios</button>
-        </div>
+        </form>
     </div>
 
-    <!-- Main Content -->
-    <div class="main-content">
-        <!-- Dashboard Tab -->
-        <div id="dashboard" class="tab-content active">
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-number" id="total-students">0</div>
-                    <div class="stat-label">Total de Alunos</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number" id="total-subjects">6</div>
-                    <div class="stat-label">Matérias</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number" id="passed-students">0</div>
-                    <div class="stat-label">Alunos Aprovados</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number" id="average-grade">0.0</div>
-                    <div class="stat-label">Média Geral</div>
+    <!-- Sistema Principal -->
+    <div id="main-system" class="main-system hidden">
+        <!-- Header -->
+        <header>
+            <div class="header-content">
+                <div class="logo">🛡️ Escola Escudo</div>
+                <div class="user-info">
+                    Sistema de Gestão Escolar | <span id="current-date"></span>
+                    <button class="logout-btn" onclick="logout()">Sair</button>
                 </div>
             </div>
+        </header>
 
-            <div class="card">
-                <h2>Bem-vindo ao Sistema da Escola Escudo</h2>
-                <div class="welcome-content">
-                    <p>Gerencie alunos, matérias e notas de forma eficiente com nossa plataforma integrada.</p>
-                    <p><strong>Funcionalidades disponíveis:</strong></p>
-                    <ul>
-                        <li>Cadastro e gerenciamento de alunos</li>
-                        <li>Controle de notas por matéria e bimestre</li>
-                        <li>Cálculo automático de médias (nota mínima: 6.0)</li>
-                        <li>Relatórios de aprovação/reprovação detalhados</li>
-                        <li>Dashboard com estatísticas em tempo real</li>
-                        <li>Sistema de filtros e busca avançada</li>
-                    </ul>
-                </div>
+        <!-- Navigation Tabs -->
+        <div class="nav-tabs">
+            <div class="nav-tabs-content">
+                <button class="tab-button active" onclick="switchTab('dashboard', this)">📊 Dashboard</button>
+                <button class="tab-button" onclick="switchTab('students', this)">👥 Alunos</button>
+                <button class="tab-button" onclick="switchTab('subjects', this)">📚 Matérias</button>
+                <button class="tab-button" onclick="switchTab('grades', this)">📝 Notas</button>
+                <button class="tab-button" onclick="switchTab('reports', this)">📈 Relatórios</button>
             </div>
         </div>
 
-        <!-- Students Tab -->
-        <div id="students" class="tab-content">
-            <div class="card">
-                <h2>Cadastrar Novo Aluno</h2>
-                <form id="student-form">
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label for="student-name">Nome Completo *</label>
-                            <input type="text" id="student-name" placeholder="Digite o nome completo" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="student-email">Email *</label>
-                            <input type="email" id="student-email" placeholder="exemplo@email.com" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="student-age">Idade *</label>
-                            <input type="number" id="student-age" min="6" max="18" placeholder="Idade do aluno" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="student-class">Turma *</label>
-                            <select id="student-class" required>
-                                <option value="">Selecione uma turma</option>
-                                <option value="6º Ano A">6º Ano A</option>
-                                <option value="6º Ano B">6º Ano B</option>
-                                <option value="7º Ano A">7º Ano A</option>
-                                <option value="7º Ano B">7º Ano B</option>
-                                <option value="8º Ano A">8º Ano A</option>
-                                <option value="8º Ano B">8º Ano B</option>
-                                <option value="9º Ano A">9º Ano A</option>
-                                <option value="9º Ano B">9º Ano B</option>
-                            </select>
-                        </div>
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Dashboard Tab -->
+            <div id="dashboard" class="tab-content active">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number" id="total-students">0</div>
+                        <div class="stat-label">Total de Alunos</div>
                     </div>
-                    <button type="submit" class="btn">Cadastrar Aluno</button>
-                </form>
-            </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="total-subjects">6</div>
+                        <div class="stat-label">Matérias</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="passed-students">0</div>
+                        <div class="stat-label">Alunos Aprovados</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="average-grade">0.0</div>
+                        <div class="stat-label">Média Geral</div>
+                    </div>
+                </div>
 
-            <div class="card">
-                <h2>Lista de Alunos</h2>
-                <div class="table-container">
-                    <table id="students-table">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Nome</th>
-                                <th>Email</th>
-                                <th>Idade</th>
-                                <th>Turma</th>
-                                <th>Média</th>
-                                <th>Status</th>
-                                <th>Ações</th>
-                            </tr>
-                        </thead>
-                        <tbody id="students-tbody">
-                            <tr>
-                                <td colspan="8" class="empty-state">
-                                    <div class="loading">
-                                        <div class="loading-spinner"></div>
-                                        <p>Carregando alunos...</p>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <div class="card">
+                    <h2>Bem-vindo ao Sistema da Escola Escudo</h2>
+                    <div class="welcome-content">
+                        <p>Gerencie alunos, matérias e notas de forma eficiente com nossa plataforma integrada.</p>
+                        <p><strong>Funcionalidades disponíveis:</strong></p>
+                        <ul>
+                            <li>Cadastro e gerenciamento de alunos</li>
+                            <li>Controle de notas por matéria e bimestre</li>
+                            <li>Cálculo automático de médias (nota mínima: 6.0)</li>
+                            <li>Relatórios de aprovação/reprovação detalhados</li>
+                            <li>Dashboard com estatísticas em tempo real</li>
+                            <li>Sistema de filtros e busca avançada</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Subjects Tab -->
-        <div id="subjects" class="tab-content">
-            <div class="card">
-                <h2>Matérias do Currículo</h2>
-                <p style="color: #8b949e; margin-bottom: 1.5rem;">
-                    As seguintes matérias fazem parte do currículo da Escola Escudo:
-                </p>
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Código</th>
-                                <th>Matéria</th>
-                                <th>Carga Horária</th>
-                                <th>Nota Mínima</th>
-                                <th>Professor</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><strong>MAT</strong></td>
-                                <td>Matemática</td>
-                                <td>5h/semana</td>
-                                <td class="grade-average">6.0</td>
-                                <td>Prof. Ana Silva</td>
-                            </tr>
-                            <tr>
-                                <td><strong>POR</strong></td>
-                                <td>Português</td>
-                                <td>5h/semana</td>
-                                <td class="grade-average">6.0</td>
-                                <td>Prof. Carlos Santos</td>
-                            </tr>
-                            <tr>
-                                <td><strong>HIS</strong></td>
-                                <td>História</td>
-                                <td>3h/semana</td>
-                                <td class="grade-average">6.0</td>
-                                <td>Prof. Maria Oliveira</td>
-                            </tr>
-                            <tr>
-                                <td><strong>GEO</strong></td>
-                                <td>Geografia</td>
-                                <td>3h/semana</td>
-                                <td class="grade-average">6.0</td>
-                                <td>Prof. João Costa</td>
-                            </tr>
-                            <tr>
-                                <td><strong>CIE</strong></td>
-                                <td>Ciências</td>
-                                <td>4h/semana</td>
-                                <td class="grade-average">6.0</td>
-                                <td>Prof. Rosa Lima</td>
-                            </tr>
-                            <tr>
-                                <td><strong>ING</strong></td>
-                                <td>Inglês</td>
-                                <td>2h/semana</td>
-                                <td class="grade-average">6.0</td>
-                                <td>Prof. Peter Johnson</td>
-                            </tr>
-                        </tbody>
-                    </table>
+            <!-- Students Tab -->
+            <div id="students" class="tab-content">
+                <div class="card">
+                    <h2>Cadastrar Novo Aluno</h2>
+                    <form id="student-form">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="student-name">Nome Completo *</label>
+                                <input type="text" id="student-name" placeholder="Digite o nome completo" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="student-email">Email *</label>
+                                <input type="email" id="student-email" placeholder="exemplo@email.com" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="student-age">Idade *</label>
+                                <input type="number" id="student-age" min="6" max="18" placeholder="Idade do aluno" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="student-class">Turma *</label>
+                                <select id="student-class" required>
+                                    <option value="">Selecione uma turma</option>
+                                    <option value="6º Ano A">6º Ano A</option>
+                                    <option value="6º Ano B">6º Ano B</option>
+                                    <option value="7º Ano A">7º Ano A</option>
+                                    <option value="7º Ano B">7º Ano B</option>
+                                    <option value="8º Ano A">8º Ano A</option>
+                                    <option value="8º Ano B">8º Ano B</option>
+                                    <option value="9º Ano A">9º Ano A</option>
+                                    <option value="9º Ano B">9º Ano B</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn">Cadastrar Aluno</button>
+                    </form>
+                </div>
+
+                <div class="card">
+                    <h2>Lista de Alunos</h2>
+                    <div class="table-container">
+                        <table id="students-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nome</th>
+                                    <th>Email</th>
+                                    <th>Idade</th>
+                                    <th>Turma</th>
+                                    <th>Média</th>
+                                    <th>Status</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="students-tbody">
+                                <tr>
+                                    <td colspan="8" class="empty-state">
+                                        <div class="loading">
+                                            <div class="loading-spinner"></div>
+                                            <p>Carregando alunos...</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Grades Tab -->
-        <div id="grades" class="tab-content">
-            <div class="card">
-                <h2>Lançar Notas</h2>
-                <form id="grades-form">
-                    <div class="form-grid">
+            <!-- Subjects Tab -->
+            <div id="subjects" class="tab-content">
+                <div class="card">
+                    <h2>Matérias do Currículo</h2>
+                    <p style="color: #8b949e; margin-bottom: 1.5rem;">
+                        As seguintes matérias fazem parte do currículo da Escola Escudo:
+                    </p>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Código</th>
+                                    <th>Matéria</th>
+                                    <th>Carga Horária</th>
+                                    <th>Nota Mínima</th>
+                                    <th>Professor</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>MAT</strong></td>
+                                    <td>Matemática</td>
+                                    <td>5h/semana</td>
+                                    <td class="grade-average">6.0</td>
+                                    <td>Prof. Ana Silva</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>POR</strong></td>
+                                    <td>Português</td>
+                                    <td>5h/semana</td>
+                                    <td class="grade-average">6.0</td>
+                                    <td>Prof. Carlos Santos</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>HIS</strong></td>
+                                    <td>História</td>
+                                    <td>3h/semana</td>
+                                    <td class="grade-average">6.0</td>
+                                    <td>Prof. Maria Oliveira</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>GEO</strong></td>
+                                    <td>Geografia</td>
+                                    <td>3h/semana</td>
+                                    <td class="grade-average">6.0</td>
+                                    <td>Prof. João Costa</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>CIE</strong></td>
+                                    <td>Ciências</td>
+                                    <td>4h/semana</td>
+                                    <td class="grade-average">6.0</td>
+                                    <td>Prof. Rosa Lima</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>ING</strong></td>
+                                    <td>Inglês</td>
+                                    <td>2h/semana</td>
+                                    <td class="grade-average">6.0</td>
+                                    <td>Prof. Peter Johnson</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Grades Tab -->
+            <div id="grades" class="tab-content">
+                <div class="card">
+                    <h2>Lançar Notas</h2>
+                    <form id="grades-form">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="grade-student">Aluno *</label>
+                                <select id="grade-student" required>
+                                    <option value="">Selecione um aluno</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="grade-subject">Matéria *</label>
+                                <select id="grade-subject" required>
+                                    <option value="">Selecione uma matéria</option>
+                                    <option value="MAT">Matemática</option>
+                                    <option value="POR">Português</option>
+                                    <option value="HIS">História</option>
+                                    <option value="GEO">Geografia</option>
+                                    <option value="CIE">Ciências</option>
+                                    <option value="ING">Inglês</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="grade-period">Bimestre *</label>
+                                <select id="grade-period" required>
+                                    <option value="">Selecione o bimestre</option>
+                                    <option value="1">1º Bimestre</option>
+                                    <option value="2">2º Bimestre</option>
+                                    <option value="3">3º Bimestre</option>
+                                    <option value="4">4º Bimestre</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="grade-value">Nota (0-10) *</label>
+                                <input type="number" id="grade-value" min="0" max="10" step="0.1" 
+                                       placeholder="Digite a nota" required>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn">Lançar Nota</button>
+                    </form>
+                </div>
+
+                <div class="card">
+                    <h2>Consultar Notas</h2>
+                    <div class="filter-section">
                         <div class="form-group">
-                            <label for="grade-student">Aluno *</label>
-                            <select id="grade-student" required>
-                                <option value="">Selecione um aluno</option>
+                            <label for="search-student">Filtrar por Aluno</label>
+                            <select id="search-student">
+                                <option value="">Todos os alunos</option>
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="grade-subject">Matéria *</label>
-                            <select id="grade-subject" required>
-                                <option value="">Selecione uma matéria</option>
+                            <label for="search-subject">Filtrar por Matéria</label>
+                            <select id="search-subject">
+                                <option value="">Todas as matérias</option>
                                 <option value="MAT">Matemática</option>
                                 <option value="POR">Português</option>
                                 <option value="HIS">História</option>
@@ -231,174 +692,584 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="grade-period">Bimestre *</label>
-                            <select id="grade-period" required>
-                                <option value="">Selecione o bimestre</option>
-                                <option value="1">1º Bimestre</option>
-                                <option value="2">2º Bimestre</option>
-                                <option value="3">3º Bimestre</option>
-                                <option value="4">4º Bimestre</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="grade-value">Nota (0-10) *</label>
-                            <input type="number" id="grade-value" min="0" max="10" step="0.1" 
-                                   placeholder="Digite a nota" required>
+                            <label>&nbsp;</label>
+                            <div>
+                                <button id="filter-btn" class="btn btn-secondary">Filtrar</button>
+                                <button id="clear-filters-btn" class="btn btn-secondary">Limpar</button>
+                            </div>
                         </div>
                     </div>
-                    <button type="submit" class="btn">Lançar Nota</button>
-                </form>
+
+                    <div class="table-container">
+                        <table id="grades-table">
+                            <thead>
+                                <tr>
+                                    <th>Aluno</th>
+                                    <th>Matéria</th>
+                                    <th>1º Bim</th>
+                                    <th>2º Bim</th>
+                                    <th>3º Bim</th>
+                                    <th>4º Bim</th>
+                                    <th>Média</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="grades-tbody">
+                                <tr>
+                                    <td colspan="8" class="empty-state">
+                                        <div class="loading">
+                                            <div class="loading-spinner"></div>
+                                            <p>Carregando notas...</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
 
-            <div class="card">
-                <h2>Consultar Notas</h2>
-                <div class="filter-section">
-                    <div class="form-group">
-                        <label for="search-student">Filtrar por Aluno</label>
-                        <select id="search-student">
-                            <option value="">Todos os alunos</option>
-                        </select>
+            <!-- Reports Tab -->
+            <div id="reports" class="tab-content">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number status-approved" id="report-approved">0</div>
+                        <div class="stat-label">Aprovados</div>
                     </div>
-                    <div class="form-group">
-                        <label for="search-subject">Filtrar por Matéria</label>
-                        <select id="search-subject">
-                            <option value="">Todas as matérias</option>
-                            <option value="MAT">Matemática</option>
-                            <option value="POR">Português</option>
-                            <option value="HIS">História</option>
-                            <option value="GEO">Geografia</option>
-                            <option value="CIE">Ciências</option>
-                            <option value="ING">Inglês</option>
-                        </select>
+                    <div class="stat-card">
+                        <div class="stat-number status-failed" id="report-failed">0</div>
+                        <div class="stat-label">Reprovados</div>
                     </div>
-                    <div class="form-group">
-                        <label>&nbsp;</label>
-                        <div>
-                            <button id="filter-btn" class="btn btn-secondary">Filtrar</button>
-                            <button id="clear-filters-btn" class="btn btn-secondary">Limpar</button>
-                        </div>
+                    <div class="stat-card">
+                        <div class="stat-number status-recovery" id="report-recovery">0</div>
+                        <div class="stat-label">Em Recuperação</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="report-percentage">0%</div>
+                        <div class="stat-label">Taxa de Aprovação</div>
                     </div>
                 </div>
 
-                <div class="table-container">
-                    <table id="grades-table">
-                        <thead>
-                            <tr>
-                                <th>Aluno</th>
-                                <th>Matéria</th>
-                                <th>1º Bim</th>
-                                <th>2º Bim</th>
-                                <th>3º Bim</th>
-                                <th>4º Bim</th>
-                                <th>Média</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody id="grades-tbody">
-                            <tr>
-                                <td colspan="8" class="empty-state">
-                                    <div class="loading">
-                                        <div class="loading-spinner"></div>
-                                        <p>Carregando notas...</p>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <div class="card">
+                    <h2>Relatório de Desempenho por Aluno</h2>
+                    <div class="table-container">
+                        <table id="student-report-table">
+                            <thead>
+                                <tr>
+                                    <th>Aluno</th>
+                                    <th>Turma</th>
+                                    <th>Matemática</th>
+                                    <th>Português</th>
+                                    <th>História</th>
+                                    <th>Geografia</th>
+                                    <th>Ciências</th>
+                                    <th>Inglês</th>
+                                    <th>Média Geral</th>
+                                    <th>Status Final</th>
+                                </tr>
+                            </thead>
+                            <tbody id="student-report-tbody">
+                                <tr>
+                                    <td colspan="10" class="empty-state">
+                                        <div class="loading">
+                                            <div class="loading-spinner"></div>
+                                            <p>Carregando relatório...</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>Relatório por Matéria</h2>
+                    <div class="table-container">
+                        <table id="subject-report-table">
+                            <thead>
+                                <tr>
+                                    <th>Matéria</th>
+                                    <th>Total Alunos</th>
+                                    <th>Aprovados</th>
+                                    <th>Reprovados</th>
+                                    <th>Média da Turma</th>
+                                    <th>Taxa de Aprovação</th>
+                                </tr>
+                            </thead>
+                            <tbody id="subject-report-tbody">
+                                <tr>
+                                    <td colspan="6" class="empty-state">
+                                        <div class="loading">
+                                            <div class="loading-spinner"></div>
+                                            <p>Carregando relatório...</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Reports Tab -->
-        <div id="reports" class="tab-content">
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-number status-approved" id="report-approved">0</div>
-                    <div class="stat-label">Aprovados</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number status-failed" id="report-failed">0</div>
-                    <div class="stat-label">Reprovados</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number status-recovery" id="report-recovery">0</div>
-                    <div class="stat-label">Em Recuperação</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number" id="report-percentage">0%</div>
-                    <div class="stat-label">Taxa de Aprovação</div>
-                </div>
-            </div>
-
-            <div class="card">
-                <h2>Relatório de Desempenho por Aluno</h2>
-                <div class="table-container">
-                    <table id="student-report-table">
-                        <thead>
-                            <tr>
-                                <th>Aluno</th>
-                                <th>Turma</th>
-                                <th>Matemática</th>
-                                <th>Português</th>
-                                <th>História</th>
-                                <th>Geografia</th>
-                                <th>Ciências</th>
-                                <th>Inglês</th>
-                                <th>Média Geral</th>
-                                <th>Status Final</th>
-                            </tr>
-                        </thead>
-                        <tbody id="student-report-tbody">
-                            <tr>
-                                <td colspan="10" class="empty-state">
-                                    <div class="loading">
-                                        <div class="loading-spinner"></div>
-                                        <p>Carregando relatório...</p>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <div class="card">
-                <h2>Relatório por Matéria</h2>
-                <div class="table-container">
-                    <table id="subject-report-table">
-                        <thead>
-                            <tr>
-                                <th>Matéria</th>
-                                <th>Total Alunos</th>
-                                <th>Aprovados</th>
-                                <th>Reprovados</th>
-                                <th>Média da Turma</th>
-                                <th>Taxa de Aprovação</th>
-                            </tr>
-                        </thead>
-                        <tbody id="subject-report-tbody">
-                            <tr>
-                                <td colspan="6" class="empty-state">
-                                    <div class="loading">
-                                        <div class="loading-spinner"></div>
-                                        <p>Carregando relatório...</p>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
+        <!-- Footer -->
+        <footer>
+            <p>&copy; 2024 Escola Escudo - Sistema de Gestão Escolar</p>
+            <p style="font-size: 0.8rem; margin-top: 0.5rem;">Desenvolvido com Python Flask + MySQL</p>
+        </footer>
     </div>
 
     <!-- JavaScript -->
-    <script src="av1.scripts.js"></script>
+    <script>
+        // Sistema de dados em memória
+        let students = [];
+        let grades = {};
+        let currentStudentId = 1;
 
-    <!-- Footer (opcional) -->
-    <footer style="text-align: center; padding: 2rem; color: #6b7280; border-top: 1px solid rgba(255,255,255,0.1); margin-top: 3rem;">
-        <p>&copy; 2024 Escola Escudo - Sistema de Gestão Escolar</p>
-        <p style="font-size: 0.8rem; margin-top: 0.5rem;">Desenvolvido com Python Flask + MySQL</p>
-    </footer>
+        // Função de login
+        document.getElementById('login-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const username = document.getElementById('login-username').value.trim();
+            const password = document.getElementById('login-password').value;
+            
+            if (username === 'admin' && password === '1234') {
+                document.getElementById('login-screen').classList.add('hidden');
+                document.getElementById('main-system').classList.remove('hidden');
+                initializeSystem();
+            } else {
+                document.getElementById('login-error').textContent = 'Usuário ou senha incorretos.';
+            }
+        });
+
+        // Função de logout
+        function logout() {
+            document.getElementById('main-system').classList.add('hidden');
+            document.getElementById('login-screen').classList.remove('hidden');
+            document.getElementById('login-username').value = '';
+            document.getElementById('login-password').value = '';
+            document.getElementById('login-error').textContent = '';
+        }
+
+        // Inicialização do sistema
+        function initializeSystem() {
+            updateCurrentDate();
+            setTimeout(() => {
+                document.getElementById('students-tbody').innerHTML = '<tr><td colspan="8" class="empty-state">Nenhum aluno cadastrado</td></tr>';
+                document.getElementById('grades-tbody').innerHTML = '<tr><td colspan="8" class="empty-state">Nenhuma nota lançada</td></tr>';
+                document.getElementById('student-report-tbody').innerHTML = '<tr><td colspan="10" class="empty-state">Nenhum relatório disponível</td></tr>';
+                document.getElementById('subject-report-tbody').innerHTML = '<tr><td colspan="6" class="empty-state">Nenhum relatório disponível</td></tr>';
+            }, 1000);
+
+            // Event listeners
+            document.getElementById('student-form').addEventListener('submit', addStudent);
+            document.getElementById('grades-form').addEventListener('submit', addGrade);
+            document.getElementById('filter-btn').addEventListener('click', filterGrades);
+            document.getElementById('clear-filters-btn').addEventListener('click', clearFilters);
+        }
+
+        // Atualizar data atual
+        function updateCurrentDate() {
+            const now = new Date();
+            const options = { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric',
+                weekday: 'long'
+            };
+            document.getElementById('current-date').textContent = now.toLocaleDateString('pt-BR', options);
+        }
+
+        // Sistema de tabs
+        function switchTab(tabName, buttonElement) {
+            // Remove active das tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Ativa a tab selecionada
+            document.getElementById(tabName).classList.add('active');
+            buttonElement.classList.add('active');
+
+            // Atualiza dados específicos da tab
+            if (tabName === 'dashboard') {
+                updateDashboard();
+            } else if (tabName === 'reports') {
+                updateReports();
+            }
+        }
+
+        // Adicionar aluno
+        function addStudent(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('student-name').value.trim();
+            const email = document.getElementById('student-email').value.trim();
+            const age = parseInt(document.getElementById('student-age').value);
+            const studentClass = document.getElementById('student-class').value;
+
+            // Validações
+            if (!name || !email || !age || !studentClass) {
+                alert('Por favor, preencha todos os campos obrigatórios.');
+                return;
+            }
+
+            // Verifica se email já existe
+            if (students.some(student => student.email === email)) {
+                alert('Este email já está cadastrado.');
+                return;
+            }
+
+            // Criar novo aluno
+            const newStudent = {
+                id: currentStudentId++,
+                name,
+                email,
+                age,
+                class: studentClass,
+                average: 0,
+                status: 'Sem notas'
+            };
+
+            students.push(newStudent);
+            grades[newStudent.id] = {};
+
+            // Limpar formulário
+            document.getElementById('student-form').reset();
+
+            // Atualizar displays
+            updateStudentsTable();
+            updateStudentSelects();
+            updateDashboard();
+
+            alert('Aluno cadastrado com sucesso!');
+        }
+
+        // Atualizar tabela de alunos
+        function updateStudentsTable() {
+            const tbody = document.getElementById('students-tbody');
+            
+            if (students.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="8" class="empty-state">Nenhum aluno cadastrado</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = students.map(student => `
+                <tr>
+                    <td>${student.id}</td>
+                    <td>${student.name}</td>
+                    <td>${student.email}</td>
+                    <td>${student.age}</td>
+                    <td>${student.class}</td>
+                    <td class="grade-average">${student.average.toFixed(1)}</td>
+                    <td><span class="status-${student.status === 'Aprovado' ? 'approved' : student.status === 'Reprovado' ? 'failed' : 'recovery'}">${student.status}</span></td>
+                    <td>
+                        <button class="btn btn-secondary" onclick="removeStudent(${student.id})" style="font-size: 0.8rem; padding: 0.3rem 0.8rem;">Remover</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Remover aluno
+        function removeStudent(studentId) {
+            if (confirm('Tem certeza que deseja remover este aluno?')) {
+                students = students.filter(student => student.id !== studentId);
+                delete grades[studentId];
+                updateStudentsTable();
+                updateStudentSelects();
+                updateGradesTable();
+                updateDashboard();
+                updateReports();
+            }
+        }
+
+        // Atualizar selects de alunos
+        function updateStudentSelects() {
+            const gradeSelect = document.getElementById('grade-student');
+            const searchSelect = document.getElementById('search-student');
+
+            const options = students.map(student => 
+                `<option value="${student.id}">${student.name}</option>`
+            ).join('');
+
+            gradeSelect.innerHTML = '<option value="">Selecione um aluno</option>' + options;
+            searchSelect.innerHTML = '<option value="">Todos os alunos</option>' + options;
+        }
+
+        // Adicionar nota
+        function addGrade(e) {
+            e.preventDefault();
+
+            const studentId = parseInt(document.getElementById('grade-student').value);
+            const subject = document.getElementById('grade-subject').value;
+            const period = document.getElementById('grade-period').value;
+            const value = parseFloat(document.getElementById('grade-value').value);
+
+            if (!studentId || !subject || !period || isNaN(value)) {
+                alert('Por favor, preencha todos os campos.');
+                return;
+            }
+
+            if (value < 0 || value > 10) {
+                alert('A nota deve estar entre 0 e 10.');
+                return;
+            }
+
+            // Inicializar grades do aluno se necessário
+            if (!grades[studentId]) {
+                grades[studentId] = {};
+            }
+            if (!grades[studentId][subject]) {
+                grades[studentId][subject] = {};
+            }
+
+            // Adicionar nota
+            grades[studentId][subject][period] = value;
+
+            // Calcular médias
+            calculateStudentAverages();
+
+            // Limpar formulário
+            document.getElementById('grades-form').reset();
+
+            // Atualizar displays
+            updateStudentsTable();
+            updateGradesTable();
+            updateDashboard();
+
+            alert('Nota lançada com sucesso!');
+        }
+
+        // Calcular médias dos alunos
+        function calculateStudentAverages() {
+            students.forEach(student => {
+                const studentGrades = grades[student.id] || {};
+                const subjects = ['MAT', 'POR', 'HIS', 'GEO', 'CIE', 'ING'];
+                let totalSubjects = 0;
+                let totalSum = 0;
+                let hasGrades = false;
+
+                subjects.forEach(subject => {
+                    if (studentGrades[subject]) {
+                        const subjectGrades = Object.values(studentGrades[subject]);
+                        if (subjectGrades.length > 0) {
+                            const subjectAverage = subjectGrades.reduce((a, b) => a + b, 0) / subjectGrades.length;
+                            totalSum += subjectAverage;
+                            totalSubjects++;
+                            hasGrades = true;
+                        }
+                    }
+                });
+
+                if (hasGrades && totalSubjects > 0) {
+                    student.average = totalSum / totalSubjects;
+                    student.status = student.average >= 6.0 ? 'Aprovado' : 'Reprovado';
+                } else {
+                    student.average = 0;
+                    student.status = 'Sem notas';
+                }
+            });
+        }
+
+        // Atualizar tabela de notas
+        function updateGradesTable() {
+            const tbody = document.getElementById('grades-tbody');
+            const gradeRows = [];
+
+            students.forEach(student => {
+                const studentGrades = grades[student.id] || {};
+                ['MAT', 'POR', 'HIS', 'GEO', 'CIE', 'ING'].forEach(subject => {
+                    const subjectName = {
+                        'MAT': 'Matemática',
+                        'POR': 'Português', 
+                        'HIS': 'História',
+                        'GEO': 'Geografia',
+                        'CIE': 'Ciências',
+                        'ING': 'Inglês'
+                    }[subject];
+
+                    const subjectGrades = studentGrades[subject] || {};
+                    const grades1 = subjectGrades['1'] || '-';
+                    const grades2 = subjectGrades['2'] || '-';
+                    const grades3 = subjectGrades['3'] || '-';
+                    const grades4 = subjectGrades['4'] || '-';
+
+                    const gradeValues = Object.values(subjectGrades);
+                    const average = gradeValues.length > 0 ? 
+                        (gradeValues.reduce((a, b) => a + b, 0) / gradeValues.length).toFixed(1) : '-';
+                    
+                    const status = average !== '-' ? (average >= 6.0 ? 'Aprovado' : 'Reprovado') : 'Sem notas';
+                    const statusClass = status === 'Aprovado' ? 'status-approved' : status === 'Reprovado' ? 'status-failed' : '';
+
+                    gradeRows.push(`
+                        <tr>
+                            <td>${student.name}</td>
+                            <td>${subjectName}</td>
+                            <td>${grades1}</td>
+                            <td>${grades2}</td>
+                            <td>${grades3}</td>
+                            <td>${grades4}</td>
+                            <td class="grade-average">${average}</td>
+                            <td><span class="${statusClass}">${status}</span></td>
+                        </tr>
+                    `);
+                });
+            });
+
+            if (gradeRows.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="8" class="empty-state">Nenhuma nota lançada</td></tr>';
+            } else {
+                tbody.innerHTML = gradeRows.join('');
+            }
+        }
+
+        // Filtrar notas
+        function filterGrades() {
+            // Implementação básica de filtro
+            updateGradesTable();
+        }
+
+        // Limpar filtros
+        function clearFilters() {
+            document.getElementById('search-student').value = '';
+            document.getElementById('search-subject').value = '';
+            updateGradesTable();
+        }
+
+        // Atualizar dashboard
+        function updateDashboard() {
+            const totalStudents = students.length;
+            const passedStudents = students.filter(s => s.status === 'Aprovado').length;
+            const averageGrade = students.length > 0 ? 
+                (students.reduce((sum, s) => sum + s.average, 0) / students.length) : 0;
+
+            document.getElementById('total-students').textContent = totalStudents;
+            document.getElementById('passed-students').textContent = passedStudents;
+            document.getElementById('average-grade').textContent = averageGrade.toFixed(1);
+        }
+
+        // Atualizar relatórios
+        function updateReports() {
+            const approved = students.filter(s => s.status === 'Aprovado').length;
+            const failed = students.filter(s => s.status === 'Reprovado').length;
+            const recovery = students.filter(s => s.status === 'Em Recuperação').length;
+            const percentage = students.length > 0 ? ((approved / students.length) * 100).toFixed(1) : 0;
+
+            document.getElementById('report-approved').textContent = approved;
+            document.getElementById('report-failed').textContent = failed;
+            document.getElementById('report-recovery').textContent = recovery;
+            document.getElementById('report-percentage').textContent = percentage + '%';
+
+            // Atualizar tabela de relatório por aluno
+            updateStudentReportTable();
+            updateSubjectReportTable();
+        }
+
+        // Atualizar tabela de relatório por aluno
+        function updateStudentReportTable() {
+            const tbody = document.getElementById('student-report-tbody');
+            
+            if (students.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="10" class="empty-state">Nenhum relatório disponível</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = students.map(student => {
+                const studentGrades = grades[student.id] || {};
+                const subjects = ['MAT', 'POR', 'HIS', 'GEO', 'CIE', 'ING'];
+                const subjectAverages = subjects.map(subject => {
+                    const subjectGrades = studentGrades[subject] || {};
+                    const gradeValues = Object.values(subjectGrades);
+                    return gradeValues.length > 0 ? 
+                        (gradeValues.reduce((a, b) => a + b, 0) / gradeValues.length).toFixed(1) : '-';
+                });
+
+                const statusClass = student.status === 'Aprovado' ? 'status-approved' : 
+                                  student.status === 'Reprovado' ? 'status-failed' : '';
+
+                return `
+                    <tr>
+                        <td>${student.name}</td>
+                        <td>${student.class}</td>
+                        <td>${subjectAverages[0]}</td>
+                        <td>${subjectAverages[1]}</td>
+                        <td>${subjectAverages[2]}</td>
+                        <td>${subjectAverages[3]}</td>
+                        <td>${subjectAverages[4]}</td>
+                        <td>${subjectAverages[5]}</td>
+                        <td class="grade-average">${student.average.toFixed(1)}</td>
+                        <td><span class="${statusClass}">${student.status}</span></td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // Atualizar tabela de relatório por matéria
+        function updateSubjectReportTable() {
+            const tbody = document.getElementById('subject-report-tbody');
+            const subjects = [
+                {code: 'MAT', name: 'Matemática'},
+                {code: 'POR', name: 'Português'},
+                {code: 'HIS', name: 'História'},
+                {code: 'GEO', name: 'Geografia'},
+                {code: 'CIE', name: 'Ciências'},
+                {code: 'ING', name: 'Inglês'}
+            ];
+
+            tbody.innerHTML = subjects.map(subject => {
+                const subjectStats = calculateSubjectStats(subject.code);
+                const approvalRate = subjectStats.total > 0 ? 
+                    ((subjectStats.approved / subjectStats.total) * 100).toFixed(1) : 0;
+
+                return `
+                    <tr>
+                        <td>${subject.name}</td>
+                        <td>${subjectStats.total}</td>
+                        <td class="status-approved">${subjectStats.approved}</td>
+                        <td class="status-failed">${subjectStats.failed}</td>
+                        <td class="grade-average">${subjectStats.average}</td>
+                        <td>${approvalRate}%</td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // Calcular estatísticas por matéria
+        function calculateSubjectStats(subjectCode) {
+            let total = 0;
+            let approved = 0;
+            let failed = 0;
+            let totalSum = 0;
+            let hasGrades = 0;
+
+            students.forEach(student => {
+                const studentGrades = grades[student.id] || {};
+                const subjectGrades = studentGrades[subjectCode] || {};
+                const gradeValues = Object.values(subjectGrades);
+                
+                if (gradeValues.length > 0) {
+                    const average = gradeValues.reduce((a, b) => a + b, 0) / gradeValues.length;
+                    total++;
+                    totalSum += average;
+                    hasGrades++;
+                    
+                    if (average >= 6.0) {
+                        approved++;
+                    } else {
+                        failed++;
+                    }
+                }
+            });
+
+            return {
+                total,
+                approved,
+                failed,
+                average: hasGrades > 0 ? (totalSum / hasGrades).toFixed(1) : '0.0'
+            };
+        }
+    </script>
 </body>
 </html>
