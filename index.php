@@ -6,39 +6,51 @@ if ($conn->connect_error) {
 
 /* ===== Inserções ===== */
 if (isset($_POST["add_professor"])) {
-    $nome = $_POST["nome"];
-    $disciplina = $_POST["disciplina"];
+    $nome = $conn->real_escape_string($_POST["nome"]);
+    $disciplina = $conn->real_escape_string($_POST["disciplina"]);
     $conn->query("INSERT INTO professores (nome, disciplina) VALUES ('$nome', '$disciplina')");
+    header("Location: " . $_SERVER['PHP_SELF']);
+    exit;
 }
 
 if (isset($_POST["add_aluno"])) {
-    $nome = $_POST["nome"];
-    $idade = $_POST["idade"];
-    $turma = $_POST["turma"];
+    $nome = $conn->real_escape_string($_POST["nome"]);
+    $idade = (int)$_POST["idade"];
+    $turma = $conn->real_escape_string($_POST["turma"]);
     $conn->query("INSERT INTO alunos (nome, idade, turma) VALUES ('$nome', '$idade', '$turma')");
+    header("Location: " . $_SERVER['PHP_SELF']);
+    exit;
 }
 
 if (isset($_POST["add_nota"])) {
-    $aluno_id = $_POST["aluno_id"];
-    $professor_id = $_POST["professor_id"];
-    $nota = $_POST["nota"];
+    $aluno_id = (int)$_POST["aluno_id"];
+    $professor_id = (int)$_POST["professor_id"];
+    $nota = (float)$_POST["nota"];
     $conn->query("INSERT INTO notas (aluno_id, professor_id, nota) VALUES ('$aluno_id', '$professor_id', '$nota')");
+    header("Location: " . $_SERVER['PHP_SELF']);
+    exit;
 }
 
 /* ===== Exclusões ===== */
 if (isset($_GET["delete_professor"])) {
-    $id = $_GET["delete_professor"];
+    $id = (int)$_GET["delete_professor"];
     $conn->query("DELETE FROM professores WHERE id=$id");
+    header("Location: " . $_SERVER['PHP_SELF']);
+    exit;
 }
 
 if (isset($_GET["delete_aluno"])) {
-    $id = $_GET["delete_aluno"];
+    $id = (int)$_GET["delete_aluno"];
     $conn->query("DELETE FROM alunos WHERE id=$id");
+    header("Location: " . $_SERVER['PHP_SELF']);
+    exit;
 }
 
 if (isset($_GET["delete_nota"])) {
-    $id = $_GET["delete_nota"];
+    $id = (int)$_GET["delete_nota"];
     $conn->query("DELETE FROM notas WHERE id=$id");
+    header("Location: " . $_SERVER['PHP_SELF']);
+    exit;
 }
 ?>
 
