@@ -411,6 +411,7 @@
             <input type="text" id="login-username" placeholder="Usuário" required>
             <input type="password" id="login-password" placeholder="Senha" required>
             <button type="submit">Entrar</button>
+            <button type="button" id="open-register" style="margin-top:8px; background: rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.12); color:#fff;">Cadastrar como Aluno</button>
             <p id="login-error" class="login-error"></p>
             <div style="margin-top: 1.5rem; font-size: 0.8rem; color: rgba(255, 255, 255, 0.6);">
                 <p><strong>👨‍💼 ADMINISTRADORES:</strong></p>
@@ -839,6 +840,12 @@
             } else {
                 document.getElementById('login-error').textContent = 'Usuário ou senha incorretos.';
             }
+        });
+
+        // Abrir registro externo (redireciona para register.php)
+        document.getElementById('open-register').addEventListener('click', function(){
+            // direciona para a página de registro php no servidor (pré-seleciona aluno)
+            window.location.href = '/register.php?tipo=aluno';
         });
 
         // Função de logout

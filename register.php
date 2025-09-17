@@ -160,6 +160,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
 
     <script>
+    // Pre-seleciona tipo se passado via query string
+    (function(){
+        const params = new URLSearchParams(window.location.search);
+        const tipo = params.get('tipo');
+        if (tipo === 'aluno' || tipo === 'professor') {
+            const sel = document.getElementById('tipo');
+            sel.value = tipo;
+            updateRefOptions(tipo);
+        }
+    })();
     function updateRefOptions(tipo) {
         const refSelect = document.getElementById('id_ref');
         refSelect.innerHTML = '<option value="">Selecione...</option>';
