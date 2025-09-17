@@ -1,4 +1,12 @@
 <?php
+session_start();
+
+// Verificar se usuário está logado
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit;
+}
+
 $conn = new mysqli("localhost", "root", "", "escola");
 if ($conn->connect_error) {
     die("Erro de conexão: " . $conn->connect_error);
@@ -71,6 +79,22 @@ if (isset($_GET["delete_nota"])) {
 </head>
 <body>
     <h1>Sistema Escolar</h1>
+    <div style="text-align: right; margin-bottom: 20px;">
+        Bem-vindo(a), 
+        <?php 
+        if ($_SESSION['user_type'] == 'professor') {
+            $stmt = $conn->prepare("SELECT nome FROM professores WHERE id = ?");
+        } else {
+            $stmt = $conn->prepare("SELECT nome FROM alunos WHERE id = ?");
+        }
+        $stmt->bind_param("i", $_SESSION['ref_id']);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $user = $result->fetch_assoc();
+        echo htmlspecialchars($user['nome']);
+        ?>
+        | <a href="logout.php" style="color: #1a73e8;">Sair</a>
+    </div>
 
     <!-- Cadastro de Professores -->
     <h2>Cadastrar Professor</h2>
